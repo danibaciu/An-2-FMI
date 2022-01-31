@@ -1,0 +1,189 @@
+type Name = String
+type Quantity = Int
+
+data Ingredient = Ing Name Quantity
+    deriving Show
+
+data Reteta = R [Ingredient]
+    deriving Show
+
+r1 = R [Ing "faina" 500, Ing "oua" 4, Ing "zahar" 500]
+r2 = R [Ing "faIna" 500, Ing "zahar" 500, Ing "oua" 4]
+r3 = R [Ing "faIna" 500, Ing "zahar" 500, Ing "oua" 55]
+
+
+instance Eq Ingredient where
+    (Ing name1 quantity1) == (Ing name2 quantity2) = map toLower name1 == map toLower name2 && quantity1 == quantity2
+
+instance Ord Ingredient where
+    (Ing name1 quantity1) <= (Ing name2 quantity2) = map toLower name1 <= map toLower name2 || ((map toLower name1 == map toLower name2)
+     && (quantity1 <= quantity2))
+
+
+eqReteta :: Reteta -> Reteta -> Bool
+eqReteta (R []) (R []) = True
+eqReteta (R []) _ = True
+eqReteta _ (R []) = True
+eqReteta (R ings1) (R ings2) = foldr ((||) . (`elem` ings2)) False ings1
+
+
+--------------------------------------------------------------------------
+
+
+Care proprietate de mai jos este adevarata?
+
+
+a.
+fmap f x == pure f <> x
+
+
+b.
+fmap f x == pure f $ x
+
+
+c.
+fmap f x == pure f <*> x
+
+
+d.
+fmap f x == pure f <$> x
+
+
+---------------------------------------------------------------
+
+
+
+
+[8:49 pm, 31/01/2022] DANI: Se da urmatorul tip de date reprezentand enciclopedii
+
+import Data.Char
+
+data Enciclopedie = Intrare String String
+
+     | Lista String [Enciclopedie]
+
+   deriving Show
+
+ 
+
+enc1 = Lista "animal"[Lista "mamifer"[Intrare "elefant" "acesta e un elefant", Intrare "caine" "acesta este un caine", Intrare "pisica" "aceasta este o pisica"], Intrare "animale domestice" "definitie"]
+
+enc2 = Lista "Animal"[Lista "Mamifer"[Intrare "Elefant" "acesta e un elefant",Intrare "caIne" "acesta este un caine",Intrare "piSIca" "aceasta este o pisica"],Intrare "animale domestice" "definitie"]
+
+enc3 = Lista "animal"[Lista "mamifer"[Intrare "elefant" "Acesta e un Elefant", Intrare "caine" "acesta este un caine", Intrare "pisica" "aceasta este o pisica"], Intrare "animale domestice" …
+[8:49 pm, 31/01/2022] DANI: a)     Sa se scrie o functie care determina lista cu titlurile intrarilor dintr-o enciclopedie data ca parametru.
+
+intrari enc1
+
+["elefant","caine","pisica","animale domestice"]
+
+b)    Sa se faca instanta a clasei Eq pentru tipul de date Enc, astfel incat sa se verifice egalitatea dintre doua enciclopedii comparand componentele lor in ordinea in care apar. Titlurile intrarilor si ale listelor sunt sunt verificate fara a tine cont de litere mari sau mici.
+
+Exemple:
+
+I "caine" "animal" == I "CaiNe" "animal"   = True
+
+I "Caine" "Animal" == I "Caine" "animal"  = False
+
+enc1 == enc2 = True
+
+enc1 == enc3 = False
+
+enc1 == enc4 = False
+
+
+
+
+--------------------------------------------------------------
+
+
+instance Eq Reteta where
+    (==) (Li []) (Li []) = True
+    (==) (Li []) _ = True
+    (==) _ (Li []) = True
+    (==) (Li ings1) (Li ings2) = foldr ((&&) . (`elem` ings2)) True ings1
+
+
+-------------------------------------------------------------
+
+
+Sa se scrie o functie care pentru o lista de siruri de caractere determina lista formata transformand fiecare sir care contine doar litere si cifre astfel:
+
+-- Literele mari se transforma in litere mici
+
+-- Literele mici se transforma in '#'
+
+-- Cifrele se transforma in ‘*’
+
+ Pentru punctaj maxim scrieti si prototipul functiei cerute.
+
+> f ["FirstEXAMPLE", "2ndexample", "3-rd", "and FOURTH one"]
+
+["f####example","*#########"]
+
+
+
+-------------------------------------------------------------
+
+
+Ce ii lipseste expresiei de mai jos ca sa fie corecta?
+
+added :: Maybe Integer
+
+added = (+3) (lookup 3 $ zip [1, 2, 3] [4, 5, 6])
+
+unde
+
+lookup :: Eq a => a -> [(a,b)] -> Maybe b
+
+
+a.
+<*>
+
+
+b.
+$
+
+
+c.
+pure
+
+
+d.
+<$>
+
+
+
+----------------------------------------------
+
+
+
+data ArbList a = Node a [(Char, ArbList a)] | Empty
+
+  deriving (Eq, Show)
+
+
+
+--a.
+
+arb::Integral a => ArbList a -> Integer
+
+arb (Empty) = 0
+
+arb (Node a [(c, b)]) = toInteger a + arb b
+
+
+
+arbore = Node 40 [('a', Node 20 [('a',Empty), ('b',Empty)]), ('b', Node 30 [('z',Empty), ('c',Empty)])]
+
+arbore' = Node 40 [('a', Node 20 [('b',Empty), ('b',Empty)]), ('b', Node 30 [('z',Empty), ('c',Empty)])]
+
+arbore'' = Node 40 [('a', Node 20 [('b',Empty), ('b',Empty)]), ('b', Node 35 [('z',Empty), ('c',Empty)])]
+
+
+
+--b.
+
+instance Eq ArbList where
+
+  (Node a[(c,b)]) == (Node d[(e,f)]) = a == d && b == f
