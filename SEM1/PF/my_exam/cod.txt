@@ -1,0 +1,153 @@
+import Data.List
+
+
+
+
+
+g :: Int -> Int -> [Int]-> Bool
+
+g _ _ []  = True
+
+g a b (x : xs) = if x >= a && x <= b then g a b xs else False
+
+--functia g imi ia a b si verifica daca toate elementele sunt cuprinse intre a si b
+
+
+
+myfilter :: ([Int] -> Bool) -> [[Int]] -> Bool
+
+myfilter f [] = True
+
+myfilter f (x : xs) = if even $ length x then -- daca lungimea e para atunci merg mai departe cu verificarea si apelez g
+
+                                        (if f x then myfilter f xs
+
+                                        else False)
+
+                            else myfilter f xs
+
+
+
+
+
+f :: [[Int]] -> Int -> Int -> Bool
+
+f lista a b = myfilter (g a b) lista -- aici am apelat myfilter a b care are tipul [Int] -> Bool cu parametrii a b pentru ca a si b este contextul aplicatii lui g pe fiecare lista 
+
+
+
+test1 = f [[1,2,3],[11,6,8,8],[2,3,4,5,6,7,8,9],[6,6,7,8,8,9]] 2 10 == True
+
+test2 = f [[1,2,3],[11,8],[2,3,5,6,7,8,9],[6,6]] 2 10 == False
+
+
+
+
+----------------------------------------
+
+
+import Data.Char
+
+
+
+data Reteta = Li [Ingredient]
+
+   deriving Show
+
+
+
+data Ingredient = Ing String Int
+
+   deriving Show
+
+
+
+instance Eq Ingredient where
+
+    (==) (Ing a1 a2) (Ing b1 b2) = (map toUpper a1 == map toUpper b1) && (a2 == b2)
+
+
+
+instance Ord Ingredient where
+
+    (Ing name1 quantity1) <= (Ing name2 quantity2) = map toLower name1 <= map toLower name2 || ((map toLower name1 == map toLower name2)
+
+     && (quantity1 <= quantity2))
+
+
+
+instance Eq Reteta where
+
+    (==) (Li []) (Li []) = True
+
+    (==) (Li []) _ = True
+
+    (==) _ (Li []) = True
+
+    (==) (Li ings1) (Li ings2) = foldr ((&&) . (`elem` ings2)) True ings1
+
+
+
+
+
+
+
+r1 = Li [Ing "faina" 500, Ing "oua" 4, Ing "zahar" 500]
+
+
+
+r2 = Li [Ing "fAIna" 500, Ing "zahar" 500, Ing "Oua" 4]
+
+
+
+r3 = Li [Ing "fAIna" 500, Ing "zahar" 500, Ing "Oua" 55]
+
+
+
+test1 = (r1 == r2) ==True
+
+test2 = (r2 == r3) ==False
+
+
+-----------------------------------
+
+
+import Data.Char
+
+
+
+f :: String -> String
+
+f "" = ""
+
+f (x:xs) = if isUpper x then toLower x : f xs
+
+            else if isLower x then '#' : f xs
+
+            else '*' : f xs
+
+
+
+fct :: String -> Bool
+
+fct "" = True
+
+fct (x : xs) = if isUpper x || isLower x || isDigit x then fct xs
+
+                else False
+
+
+
+myfilter :: (String -> Bool) -> [String] -> [String]
+
+myfilter fct [] = []
+
+myfilter fct (x : xs) = if fct x then x : myfilter fct xs
+
+                        else myfilter fct xs
+
+
+
+myfunc :: [String] -> [String]
+
+myfunc lista = map f $ myfilter fct lista
