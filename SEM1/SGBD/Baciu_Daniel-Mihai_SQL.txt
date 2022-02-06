@@ -1,0 +1,1120 @@
+--creare si inserare
+create table LOCATIE
+        (cod_locatie number(5) constraint locatie_pk primary key,
+        judet varchar2(25) constraint locatie_judet not null,
+        oras varchar2(15) constraint locatie_oras not null,
+        strada varchar2(20) constraint locatie_strada not null,
+        numar varchar2(8) constraint locatie_numar not null
+        );
+        
+create table SPONSORI
+        (cod_sponsor number(5) constraint sponsor_pk primary key,
+        denumire_sponsor varchar2(25) constraint sponsor_denumire not null,
+        adresa_email varchar2(25)
+        );
+        
+create table SALA_SPORT
+        (cod_sala number(5) constraint sala_pk primary key,
+        cod_locatie number(5) constraint sala_locatie not null,
+        an_infiintare number(5) default to_number(to_char(sysdate,'yyyy')),
+        denumire varchar2(20) constraint sala_denumire not null,
+        constraint sala_locatie_fk foreign key(cod_locatie) references locatie(cod_locatie)
+        );
+        
+create table ANGAJATI_SALA
+        (cod_angajat number(5) constraint angajati_pk primary key,
+        cod_sala number(5) constraint angajati_sala not null,
+        nume varchar2(25) constraint angajati_nume not null,
+        prenume varchar2(25) constraint angajati_prenume not null,
+        data_nastere date constraint angajati_datanastere not null,
+        sex varchar2(1),
+        data_angajarii date default sysdate,
+        salariu number(5) constraint angajati_salariu not null,
+        job varchar2(15),
+        constraint angajati_sala_fk foreign key(cod_sala) references sala_sport(cod_sala),
+        constraint angajati_job_check check( lower(job)='cleaner' or lower(job)='paznic' or lower(job)='administrator' or job is null),
+        constraint angajati_sex_check check(lower(sex)='m' or lower(sex)='f' or sex is null)
+        );
+
+create table CLUB   
+        (cod_club number(5) constraint club_pk primary key,
+        cod_locatie number(5) constraint club_locatie not null,
+        denumire varchar2(25) constraint club_denumire not null,
+        data_infiintare_club date default sysdate,
+        nume_admin varchar2(25) constraint club_admin_nume not null,
+        prenume_admin varchar2(25) constraint club_admin_prenume not null,
+        constraint club_locatie_fk foreign key(cod_locatie) references locatie(cod_locatie)
+        );
+        
+create table ANTRENORI
+        (cod_antrenor number(5) constraint antrenori_pk primary key,
+        cod_club number(5) constraint antrenori_club not null,
+        nume varchar2(15) constraint antrenori_nume not null,
+        prenume varchar2(25) constraint antrenori_prenume not null,
+        data_nastere date constraint antrenori_datanastere not null,
+        nrtelefon varchar2(10),
+        data_inscriere_club date default sysdate,
+        constraint antrenori_club_fk foreign key(cod_club) references club(cod_club)
+        );
+        
+create table SPORTIV
+        (cod_sportiv number(5) constraint sportiv_pk primary key,
+        cod_club number(5) constraint sportiv_club not null,
+        nume varchar2(15) constraint sportiv_nume not null,
+        prenume varchar2(25) constraint sportiv_prenume not null,
+        data_nastere date constraint sportiv_datanastere not null,
+        nrtelefon varchar2(10),
+        constraint sportiv_club_fk foreign key(cod_club) references club(cod_club)
+        );
+
+create table FEDERATIE_DE_SPORT
+        (cod_federatie number(5) constraint federatie_pk primary key,
+        denumire varchar2(20) constraint federatie_denumire not null,
+        an_infiintare number(5) default to_number(to_char(sysdate,'yyyy')),
+        sport_practicat varchar2(15) constraint federatie_sport not null,
+        cod_locatie number(5) constraint federatie_locatie not null,
+        constraint federatie_loc_fk foreign key(cod_locatie) references locatie(cod_locatie)
+        );
+
+create table CLUB_HISTORY
+        (cod_sportiv number(5)constraint club_h_sportiv_fk references sportiv(cod_sportiv),
+        data_start date constraint club_h_data_s not null,
+        cod_club number(5)constraint club_h_club not null,
+        data_final date,
+        constraint club_h_pk_compus primary key(cod_sportiv,data_start),
+        constraint club_h_data_f_check check(data_final > data_start),
+        constraint club_h_club_fk foreign key(cod_club) references club(cod_club)
+        );
+
+create table COMPETITIE
+        (cod_competitie number(5) constraint competitie_pk primary key,
+        cod_federatie number(5) constraint competitie_fed not null,
+        cod_locatie number(5) constraint competitie_loc not null,
+        data_competitie date constraint competitie_data not null,
+        valoare_totala_premii number(5),
+        constraint competitie_fed_fk foreign key(cod_federatie) references federatie_de_sport(cod_federatie),
+        constraint competitie_loc_fk foreign key(cod_locatie) references locatie(cod_locatie)
+        );
+        
+--urmeaza tabelele asociative--
+
+create table APARTINE
+        (cod_sala number(5) constraint apartine_sala not null,
+        cod_federatie number(5)constraint apartine_fed not null,
+        cod_sportiv number(5) constraint apartine_sportiv not null,
+        constraint apartine_sala_fk foreign key(cod_sala) references sala_sport(cod_sala),
+        constraint apartine_fed_fk foreign key(cod_federatie) references federatie_de_sport(cod_federatie),
+        constraint apartine_sportiv_fk foreign key(cod_sportiv) references sportiv(cod_sportiv),
+        constraint apartine_pk_compus primary key(cod_sala,cod_federatie,cod_sportiv)
+        );
+
+create table PARTICIPA
+        (cod_sportiv number(5) constraint participa_sportiv not null,
+        cod_competitie number(5) constraint participa_competitie not null,
+        data_inscriere date default sysdate,
+        constraint participa_sportiv_fk foreign key(cod_sportiv) references sportiv(cod_sportiv),
+        constraint participa_competitie_fk foreign key(cod_competitie) references competitie(cod_competitie),
+        constraint participa_pk_compus primary key(cod_sportiv,cod_competitie)
+        );
+        
+create table SPONSORIZEAZA
+        (cod_sponsor number(5) constraint sponsorizeaza_sponsor not null,
+        cod_competitie number(5) constraint sponsorizeaza_competitie not null,
+        suma_oferita number(5) constraint sponsorizeaza_suma not null,
+        data_sponsorizarii date default sysdate,
+        constraint sponsorizeaza_sponsor_fk foreign key(cod_sponsor) references sponsori(cod_sponsor),
+        constraint sponsorizeaza_competitie_fk foreign key(cod_competitie) references competitie(cod_competitie),
+        constraint sponsorizeaza_pk_compus primary key(cod_sponsor,cod_competitie)
+        );
+
+
+--Insert in locatie--
+INSERT INTO LOCATIE
+VALUES(1,'Neamt','Roman','BD.Roman-Musat','120A');
+INSERT INTO LOCATIE
+VALUES(2,'Bucuresti','Bucuresti','Calea Soarelui','451');
+INSERT INTO LOCATIE
+VALUES(3,'Bacau','Onesti','Mihai Viteazul','1B');
+INSERT INTO LOCATIE
+VALUES(4,'Bucuresti','Bucuresti','BD.Independentei','220K');
+INSERT INTO LOCATIE
+VALUES(5,'Brasov','Brasov','Vasile Alecsandi','98');
+INSERT INTO LOCATIE
+VALUES(6,'Sibiu','Sibiu','Al.I.Cuza','666');
+INSERT INTO LOCATIE
+VALUES(7,'Neamt','Roman','Tineretului','17C');
+
+--insert in Sponsori
+INSERT INTO SPONSORI
+VALUES(10,'Facebook','mark@facebook.com');
+INSERT INTO SPONSORI
+VALUES(20,'KFC','office@kfc.com');
+INSERT INTO SPONSORI
+VALUES(30,'TonusGym','tonusgym@gmail.com');
+INSERT INTO SPONSORI
+VALUES(40,'Dani Baciu','dani@fitness.com');
+INSERT INTO SPONSORI
+VALUES(50,'McDonalds','office@mcdonalds.com');
+
+--insert in sala_sport
+INSERT INTO SALA_SPORT
+VALUES(100,1,default,'Tonus Gym');
+INSERT INTO SALA_SPORT
+VALUES(200,3,2014,'StayFit');
+INSERT INTO SALA_SPORT
+VALUES(300,3,default,'OzerGolden');
+INSERT INTO SALA_SPORT
+VALUES(400,2,2010,'WorldClass');
+INSERT INTO SALA_SPORT
+VALUES(500,6,2019,'Fitness.EU');
+INSERT INTO SALA_SPORT
+VALUES(600,7,2016,'Fitness2000');
+INSERT INTO SALA_SPORT
+VALUES(700,2,default,'WelnessClub');
+
+--insert in angajati
+CREATE SEQUENCE SEQ_ANGAJATI_SALA
+INCREMENT by 10
+START WITH 110
+MAXVALUE 1000
+NOCYCLE;
+
+INSERT INTO ANGAJATI_SALA
+VALUES(SEQ_ANGAJATI_SALA.NEXTVAL,100,'Baciu','Daniel',to_date('18/09/2001','dd/mm/yyyy'),'m',default,15000,'administrator');
+INSERT INTO ANGAJATI_SALA
+VALUES(SEQ_ANGAJATI_SALA.NEXTVAL,100,'Ungureanu','Alex',to_date('10/01/1995','dd/mm/yyyy'),'m',to_date('10/11/2018','dd/mm/yyyy'),2100,'cleaner');
+INSERT INTO ANGAJATI_SALA
+VALUES(SEQ_ANGAJATI_SALA.NEXTVAL,300,'Adi','Bianca',to_date('08/10/1989','dd/mm/yyyy'),'f',to_date('08/10/1989','dd/mm/yyyy'),2500,'paznic');
+INSERT INTO ANGAJATI_SALA
+VALUES(SEQ_ANGAJATI_SALA.NEXTVAL,200,'Tudor','Gabriel',to_date('09/03/2000','dd/mm/yyyy'),'m',default,15000,'administrator');
+INSERT INTO ANGAJATI_SALA
+VALUES(SEQ_ANGAJATI_SALA.NEXTVAL,200,'Gabriel','Daniela',to_date('11/05/1999','dd/mm/yyyy'),'f',default,1500,'cleaner');
+INSERT INTO ANGAJATI_SALA
+VALUES(SEQ_ANGAJATI_SALA.NEXTVAL,500,'Ungureanu','Vlad',to_date('10/09/2002','dd/mm/yyyy'),'m',default,9000,'administrator');
+INSERT INTO ANGAJATI_SALA
+VALUES(SEQ_ANGAJATI_SALA.NEXTVAL,400,'Gabriela','Dancila',to_date('10/05/1976','dd/mm/yyyy'),'f',to_date('02/07/1995','dd/mm/yyyy'),2840,'paznic');
+
+--insert in federatie
+select * from federatie_de_sport;
+INSERT INTO FEDERATIE_DE_SPORT
+VALUES(10,'FederatiaCulturism',1977,'culturism',2);
+INSERT INTO FEDERATIE_DE_SPORT
+VALUES(20,'FederatiaFitness',1963,'fitness',3);
+INSERT INTO FEDERATIE_DE_SPORT
+VALUES(30,'Aruncarea Ciocanului',1954,'aruncare ciocan',2);
+INSERT INTO FEDERATIE_DE_SPORT
+VALUES(40,'FederatiaHaltere',1977,'haltere',2);
+INSERT INTO FEDERATIE_DE_SPORT
+VALUES(50,'FederatiaAlergare',1989,'alergare',1);
+INSERT INTO FEDERATIE_DE_SPORT
+VALUES(60,'FederatiaSaritCoarda',2002,'sarit coarda',5);
+
+--insert in club
+INSERT INTO CLUB
+VALUES(1000,2,'Energia',default,'Gheorghe','Ionel');
+INSERT INTO CLUB
+VALUES(2000,1,'Otelu Galati',to_date('17/01/2007','dd/mm/yyyy'),'Baciu','David');
+INSERT INTO CLUB
+VALUES(3000,3,'Petrolul',to_date('19/09/1999','dd/mm/yyyy'),'Andrei','Petru');
+INSERT INTO CLUB
+VALUES(4000,4,'Steaua',to_date('08/11/2001','dd/mm/yyyy'),'Becali','Gigi');
+INSERT INTO CLUB
+VALUES(5000,2,'Dinamo',default,'Gheorghe','Mihai');
+INSERT INTO CLUB
+VALUES(6000,3,'Victoria',to_date('29/06/1985','dd/mm/yyyy'),'Ungureanu','Gigel');
+
+--insert antrenori
+INSERT INTO ANTRENORI
+VALUES(1,2000,'Petrescu','Andrei',to_date('12/03/1965','dd/mm/yyyy'),'0712345678',default);
+INSERT INTO ANTRENORI
+VALUES(2,1000,'Baciu','Daniel',to_date('17/09/2001','dd/mm/yyyy'),'0756119760',to_date('17/05/2017','dd/mm/yyyy'));
+INSERT INTO ANTRENORI
+VALUES(3,2000,'Frone','Gigel',to_date('12/11/1977','dd/mm/yyyy'),'0747812563',to_date('10/07/2007','dd/mm/yyyy'));
+INSERT INTO ANTRENORI
+VALUES(4,3000,'Andrei','Alex',to_date('24/07/1990','dd/mm/yyyy'),'0767238145',to_date('07/11/2020','dd/mm/yyyy'));
+INSERT INTO ANTRENORI
+VALUES(5,4000,'Klaus','Werner',to_date('10/12/2000','dd/mm/yyyy'),'0756347128',to_date('01/01/2010','dd/mm/yyyy'));
+
+--insert in sportiv
+
+CREATE SEQUENCE SEQ_SPORTIV
+INCREMENT by 100
+START WITH 3000
+MAXVALUE 10000
+NOCYCLE;
+
+INSERT INTO SPORTIV
+VALUES(SEQ_SPORTIV.NEXTVAL, 1000,'Nastase','Petru',to_date('25/05/1981','dd/mm/yyyy'),'0711211212');
+INSERT INTO SPORTIV
+VALUES(SEQ_SPORTIV.NEXTVAL, 2000,'Cosnete','Benone',to_date('20/07/1967','dd/mm/yyyy'),'0755555555');
+INSERT INTO SPORTIV
+VALUES(SEQ_SPORTIV.NEXTVAL, 1000,'Baciu','Daniel-Mihai',to_date('18/09/2001','dd/mm/yyyy'),'0744444444');
+INSERT INTO SPORTIV
+VALUES(SEQ_SPORTIV.NEXTVAL, 3000,'Arici','Tudor',to_date('09/12/2000','dd/mm/yyyy'),'0777777777');
+INSERT INTO SPORTIV
+VALUES(SEQ_SPORTIV.NEXTVAL, 2000,'Ungureanu','Amanda',to_date('25/09/1979','dd/mm/yyyy'),'0799999999');
+INSERT INTO SPORTIV
+VALUES(SEQ_SPORTIV.NEXTVAL, 5000,'Ungureanu','Florin',to_date('05/11/1988','dd/mm/yyyy'),'0700000000');
+INSERT INTO SPORTIV
+VALUES(SEQ_SPORTIV.NEXTVAL, 3000,'Baciu','Felicia',to_date('13/03/1994','dd/mm/yyyy'),'0733333333');
+
+--insert in club_history
+
+INSERT INTO CLUB_HISTORY
+VALUES(3000,to_date('17/06/2007','dd/mm/yyyy'),2000,to_date('18/07/2010','dd/mm/yyyy'));
+INSERT INTO CLUB_HISTORY
+VALUES(3000,to_date('19/07/2010','dd/mm/yyyy'),3000,to_date('20/03/2018','dd/mm/yyyy'));
+INSERT INTO CLUB_HISTORY
+VALUES(3300,to_date('10/09/2006','dd/mm/yyyy'),1000,to_date('18/07/2010','dd/mm/yyyy'));
+INSERT INTO CLUB_HISTORY
+VALUES(3200,to_date('17/06/2007','dd/mm/yyyy'),2000,to_date('18/07/2010','dd/mm/yyyy'));
+INSERT INTO CLUB_HISTORY
+VALUES(3100,to_date('01/01/2001','dd/mm/yyyy'),4000,to_date('04/09/2017','dd/mm/yyyy'));
+INSERT INTO CLUB_HISTORY
+VALUES(3100,to_date('05/09/2017','dd/mm/yyyy'),3000,to_date('25/11/2019','dd/mm/yyyy'));
+INSERT INTO club_history
+VALUES(3100,to_date('30/12/2019','dd/mm/yyyy'),1000,sysdate);
+
+
+--insert in competitii
+INSERT INTO COMPETITIE
+VALUES(10,10,2,to_date('08/10/2022','dd/mm/yyyy'),10000);
+INSERT INTO COMPETITIE
+VALUES(20,10,5,to_date('27/05/2023','dd/mm/yyyy'),5000);
+INSERT INTO COMPETITIE
+VALUES(30,30,4,to_date('18/04/2022','dd/mm/yyyy'),1000);
+INSERT INTO COMPETITIE
+VALUES(40,20,2,to_date('20/07/2023','dd/mm/yyyy'),7000);
+INSERT INTO COMPETITIE
+VALUES(50,50,5,to_date('02/12/2025','dd/mm/yyyy'),40000);
+INSERT INTO COMPETITIE
+VALUES(60,40,3,to_date('12/08/2021','dd/mm/yyyy'),15000);
+
+
+--inserari in tabele asociative
+
+INSERT INTO PARTICIPA
+VALUES(3000,40,default);
+INSERT INTO PARTICIPA
+VALUES(3000,30,default);
+INSERT INTO PARTICIPA
+VALUES(3100,50,to_date('19/04/2021','dd/mm/yyyy'));
+INSERT INTO PARTICIPA
+VALUES(3200,10,to_date('09/01/2021','dd/mm/yyyy'));
+INSERT INTO PARTICIPA
+VALUES(3000,50,default);
+INSERT INTO PARTICIPA
+VALUES(3500,10,to_date('27/09/2020','dd/mm/yyyy'));
+INSERT INTO PARTICIPA
+VALUES(3400,60,default);
+INSERT INTO PARTICIPA
+VALUES(3500,20,default);
+INSERT INTO PARTICIPA
+VALUES(3600,60,to_date('10/12/2020','dd/mm/yyyy'));
+INSERT INTO PARTICIPA
+VALUES(3300,50,default);
+INSERT INTO PARTICIPA
+VALUES(3200,20,to_date('14/11/2019','dd/mm/yyyy'));
+INSERT INTO PARTICIPA
+VALUES(3600,30,default);
+
+
+INSERT INTO APARTINE
+VALUES(100,10,3000);
+INSERT INTO APARTINE
+VALUES(100,10,3100);
+INSERT INTO APARTINE
+VALUES(400,10,3200);
+INSERT INTO APARTINE
+VALUES(100,20,3000);
+INSERT INTO APARTINE
+VALUES(200,40,3000);
+INSERT INTO APARTINE
+VALUES(400,50,3400);
+INSERT INTO APARTINE
+VALUES(300,40,3100);
+INSERT INTO APARTINE
+VALUES(500,50,3300);
+INSERT INTO APARTINE
+VALUES(600,60,3600);
+INSERT INTO APARTINE
+VALUES(700,30,3500);
+INSERT INTO APARTINE
+VALUES(500,30,3600);
+
+INSERT INTO SPONSORIZEAZA
+VALUES(20,10,5000,default);
+INSERT INTO SPONSORIZEAZA
+VALUES(50,10,5000,default);
+INSERT INTO SPONSORIZEAZA
+VALUES(10,40,2700,to_date('09/12/2020','dd/mm/yyyy'));
+INSERT INTO SPONSORIZEAZA
+VALUES(50,40,4300,to_date('12/02/2021','dd/mm/yyyy'));
+INSERT INTO SPONSORIZEAZA
+VALUES(10,60,1000,to_date('19/10/2020','dd/mm/yyyy'));
+INSERT INTO SPONSORIZEAZA
+VALUES(50,60,5000,to_date('01/04/2021','dd/mm/yyyy'));
+INSERT INTO SPONSORIZEAZA
+VALUES(30,60,9000,to_date('19/11/2020','dd/mm/yyyy'));
+INSERT INTO SPONSORIZEAZA
+VALUES(50,20,2000,to_date('23/06/2020','dd/mm/yyyy'));
+INSERT INTO SPONSORIZEAZA
+VALUES(20,30,200,to_date('07/05/2021','dd/mm/yyyy'));
+INSERT INTO SPONSORIZEAZA
+VALUES(10,30,300,to_date('31/12/2020','dd/mm/yyyy'));
+
+
+
+--ex6
+--pentru o locatie primita ca parametru, sa se afiseze suma totala obtinuta din sponsorizari 
+--impreuna cu numele sponsorilor si data la care au contribuit la aceasta sponsorizare 
+--pentru primele 3 competitii dupa data competitiei
+CREATE OR REPLACE PROCEDURE prog_sponsorizari( cod_loc competitie.cod_locatie%type )
+IS
+    TYPE rec_nume_data IS RECORD
+        (nume sponsori.denumire_sponsor%type,
+        data_sponsorizarii sponsorizeaza.data_sponsorizarii%type);
+    TYPE tablou_sponsorizare IS TABLE OF rec_nume_data;
+    TYPE vector_coduri_comp IS VARRAY(3) OF competitie.cod_competitie%type;
+    tab_sponsori tablou_sponsorizare;
+    vec_comp vector_coduri_comp;
+    suma_totala NUMBER := 0;
+BEGIN
+    SELECT cod_competitie
+    BULK COLLECT INTO vec_comp
+    FROM competitie where cod_locatie = cod_loc AND rownum <= 3
+    ORDER BY data_competitie;
+    
+    FOR i IN vec_comp.FIRST..vec_comp.LAST LOOP
+        IF vec_comp.exists(i) THEN
+            SELECT sum(suma_oferita)
+            INTO suma_totala
+            FROM SPONSORIZEAZA
+            WHERE COD_COMPETITIE = vec_comp(i);
+            
+            DBMS_OUTPUT.PUT_LINE('DETALII DESPRE COMPETITIA ' || vec_comp(i) || ':');
+            DBMS_OUTPUT.PUT_LINE('Suma totala : ' || suma_totala);
+        
+            SELECT denumire_sponsor, data_sponsorizarii
+            BULK COLLECT INTO tab_sponsori
+            FROM SPONSORI S JOIN SPONSORIZEAZA SP ON (SP.COD_SPONSOR = S.COD_SPONSOR)
+            WHERE SP.COD_COMPETITIE = vec_comp(i);
+            
+            FOR i IN tab_sponsori.FIRST..tab_sponsori.LAST LOOP
+                IF tab_sponsori.exists(i) THEN
+                    DBMS_OUTPUT.PUT_LINE('Sponsorul ' || i || ' este ' || tab_sponsori(i).nume || ' si a donat in data de - ' || tab_sponsori(i).data_sponsorizarii);
+                END IF;
+            END LOOP;
+            tab_sponsori.delete();
+        END IF;
+    END LOOP;
+
+END PROG_SPONSORIZARI;
+/
+
+
+DECLARE
+    cod NUMBER := '&cod_locatie';
+BEGIN
+    prog_sponsorizari(cod);
+END;
+/
+
+
+
+--ex7
+--sa se scrie codul si numele federatiilor, codul si numele 
+--sportivilor care participa la competitii la un cod de locatie dat
+
+CREATE OR REPLACE PROCEDURE prog_sportivi_fed(cod club.cod_locatie%type) 
+IS
+    cod_f federatie_de_sport.cod_federatie%type;
+    den federatie_de_sport.denumire%type;
+    c_sportivi SYS_REFCURSOR;
+    
+    TYPE sportiv_record IS RECORD
+                ( cod_s sportiv.cod_sportiv%type,
+                nume_s sportiv.nume%type,
+                prenume_s sportiv.prenume%type
+                );
+    sportiv_detalii sportiv_record;
+    CURSOR c_fest IS SELECT f.cod_federatie, f.denumire, 
+                                            CURSOR (    
+                                                    SELECT s.cod_sportiv, s.nume, s.prenume 
+                                                    FROM sportiv s JOIN apartine a  ON (a.cod_sportiv = s.cod_sportiv)
+                                                    WHERE a.cod_federatie = f.cod_federatie)
+                        FROM FEDERATIE_DE_SPORT f JOIN COMPETITIE c ON (f.cod_federatie = c.cod_federatie)
+                        WHERE c.cod_locatie = cod;
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Codul locatiei este : ' || cod);
+    
+    OPEN c_fest;
+    
+    LOOP
+        FETCH c_fest INTO cod_f, den, c_sportivi;
+        EXIT WHEN c_fest%NOTFOUND;
+        DBMS_OUTPUT.PUT_LINE('Cod federatie : '||cod_f||'. Nume federatie :'||den||' are sportivii :');
+        
+        LOOP
+            FETCH c_sportivi INTO sportiv_detalii;
+            EXIT WHEN c_sportivi%NOTFOUND;
+            
+            DBMS_OUTPUT.PUT_LINE('Cod sportiv ('||sportiv_detalii.cod_s||') pe care il cheama '||sportiv_detalii.nume_s||' '||sportiv_detalii.prenume_s||'.');
+            
+        END LOOP;
+    END LOOP;
+    
+    CLOSE c_fest;
+
+END prog_sportivi_fed;
+
+/
+
+DECLARE
+    cod club.cod_locatie%type := '&cod_locatie';
+BEGIN
+    prog_sportivi_fed(cod);
+END;
+/
+
+
+
+--ex8
+--Sa se afiseze primul club (luat in ordine crescatoare dupa cod) la care sportivii au varsta < 30 ani si care
+--au participat la competitia din anul dat ca parametru sponsorizata de anumit sponsor
+CREATE OR REPLACE FUNCTION fct_cluburi_an_sponsor( an number,
+                                                    nume_spons sponsori.denumire_sponsor%type)
+                                        RETURN club%rowtype
+IS
+    informatii club%rowtype;
+    
+BEGIN
+    SELECT c.cod_club, c.cod_locatie, c.denumire, c.data_infiintare_club, c.nume_admin, c.prenume_admin
+    INTO informatii
+    FROM club c JOIN sportiv s ON (c.cod_club=s.cod_club)
+    JOIN participa p ON (s.cod_sportiv=p.cod_sportiv) JOIN competitie co ON (co.cod_competitie=p.cod_competitie)
+    JOIN sponsorizeaza a ON (co.cod_competitie=a.cod_competitie) 
+    JOIN sponsori b ON (a.cod_sponsor=b.cod_sponsor)
+    WHERE months_between(sysdate,s.data_nastere) < 30*12 AND
+    to_number(to_char(co.data_competitie,'yyyy'))= an AND
+    lower(b.denumire_sponsor) = nume_spons AND rownum <= 1
+    ORDER BY c.cod_club;
+    
+    RETURN informatii;
+    
+    EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RAISE_APPLICATION_ERROR(-20000, 'Nu s-au gasit cluburi care sa indeplineasca cerintele');
+    WHEN TOO_MANY_ROWS THEN
+        RAISE_APPLICATION_ERROR(-20001, 'Mai multe cluburi indeplinesc cerintele!');
+    WHEN OTHERS THEN
+        RAISE_APPLICATION_ERROR(-20002, 'Alta eroare!');
+
+END fct_cluburi_an_sponsor;
+/
+DECLARE
+    an number := '&an';
+    numele_sponsorului sponsori.denumire_sponsor%type := '&nume_sponsor';
+    info club%rowtype;
+BEGIN
+    info := fct_cluburi_an_sponsor(an, numele_sponsorului);
+    DBMS_OUTPUT.PUT_LINE('Date intrare : an - '|| an || 'si nume - '||numele_sponsorului);
+    DBMS_OUTPUT.PUT_LINE('Cod club ('||info.cod_club||'), cunoscut si sub numele de ');
+    DBMS_OUTPUT.PUT_LINE(info.denumire||' este infiintat in data de '||info.data_infiintare_club||' si este administrat de ');
+    DBMS_OUTPUT.PUT_LINE(info.nume_admin||' '||info.prenume_admin||' si indeplineste conditiile cerute');
+    --am pus mai multe dbms ca se se vada mai frumos, sa nu apara o linie lunga
+END;
+/
+
+
+
+--ex9
+--Afisati sportivul care a fost la cele mai multe competitii de sport sponsorizate de o anumita firma,
+--si nr de competitii. (aici a trebuit sa mai adaug un sportiv, insertul il gasiti pe ultimul rand)
+CREATE OR REPLACE PROCEDURE p_9_sport(nume_spons sponsori.denumire_sponsor%type)
+IS
+    CURSOR c IS select s.cod_sportiv cod, initcap(s.nume), initcap(s.prenume), count(*) numar
+                    from sportiv s JOIN participa p on (s.cod_sportiv = p.cod_sportiv)
+                     JOIN competitie c on (p.cod_competitie = c.cod_competitie)
+                     JOIN sponsorizeaza s1 on (s1.cod_competitie = c.cod_competitie)
+                     JOIN sponsori s2 on (s1.cod_sponsor = s2.cod_sponsor)
+                     where initcap(nume_spons) = initcap(denumire_sponsor)
+                     group by s.cod_sportiv, initcap(s.nume), initcap(s.prenume);
+                    
+    TYPE rec_inreg IS RECORD
+            (cod_s sportiv.cod_sportiv%type,
+            nume sportiv.nume%type,
+            prenume sportiv.prenume%type,
+            nr NUMBER);
+    inreg rec_inreg;
+    maxim NUMBER := 0;
+    frecv NUMBER :=0;
+BEGIN
+    FOR inr IN c LOOP
+        IF inr.numar > maxim THEN
+            maxim := inr.numar;
+            inreg := inr;
+            frecv := 1;
+        ELSIF inr.numar = maxim THEN
+            frecv := frecv + 1;
+        END IF;
+    END LOOP;
+    
+    IF maxim = 0 THEN
+        RAISE NO_DATA_FOUND;
+    END IF;
+    
+    IF frecv > 1 THEN
+        RAISE TOO_MANY_ROWS;
+    END IF;
+
+    DBMS_OUTPUT.PUT_LINE('Persoana '||inreg.nume || ' ' || inreg.prenume||' a fost la '||inreg.nr||' competitii sportive, reprezentand maximul de competitii la care a fost o pers dintre competiile sponsorizate de '||nume_spons);
+    
+    EXCEPTION
+        WHEN TOO_MANY_ROWS THEN
+            RAISE_APPLICATION_ERROR(-20001, 'Mai multi sportivi indeplinesc cerinta.');
+        WHEN NO_DATA_FOUND THEN
+            RAISE_APPLICATION_ERROR(-20000, 'Nu este indeplinita cerinta');
+        WHEN OTHERS THEN 
+            RAISE_APPLICATION_ERROR(-20002, 'Alta eroare!!!!');
+END p_9_sport;
+/
+DECLARE
+    nume_spons sponsori.denumire_sponsor%type := '&denumire_sponsor';
+BEGIN
+    p_9_sport(nume_spons);
+END;
+/
+select * from sponsori;
+select * from sponsorizeaza
+order by cod_sponsor;
+select * from competitie;
+select * from participa;
+/
+insert into participa values (3500, 40, sysdate);
+/
+
+
+
+--ex10
+–Creati un trigger la nivel de comanda care actualizeaza valoarea premiilor la –competitii
+CREATE OR REPLACE TRIGGER t_10
+AFTER INSERT OR DELETE OR UPDATE ON sponsorizeaza
+DECLARE
+    CURSOR curs IS select cod_competitie, sum(suma_oferita) suma from sponsorizeaza group by cod_competitie;
+BEGIN
+    FOR a IN curs LOOP
+        UPDATE competitie
+        SET valoare_totala_premii = a.suma
+        WHERE cod_competitie = a.cod_competitie;
+    END LOOP;
+END t_10;
+/
+BEGIN
+ INSERT INTO sponsorizeaza
+ VALUES(40, 20, 10000, sysdate);
+END;
+/
+select * from competitie;
+/
+
+
+
+--ex11
+--Creati un trigger la nivel de linie care, la update-ul valorii totale a premiilor a competitiei,
+--sa aloce jumatate din valoarea premiilor maxime gasite in tabel daca noua valoare a premiilor
+--e mai mic decat aceast maxim.
+
+--varianta urmatoare este gresita, deoarece produce eroarea MUTATING TABLE
+CREATE OR REPLACE TRIGGER trig_11_gresit
+ AFTER INSERT OR UPDATE ON competitie
+ FOR EACH ROW
+DECLARE
+     p_min competitie.valoare_totala_premii%TYPE;
+BEGIN
+     -- gasesc jumatatea pretului maxim
+     SELECT MAX (valoare_totala_premii) / 2
+     INTO p_min
+     FROM competitie;
+
+    -- verific cu noua valoare
+    IF p_min > :NEW.valoare_totala_premii THEN
+         UPDATE competitie
+         SET valoare_totala_premii = p_min
+         WHERE cod_competitie = :NEW.cod_competitie;
+    END IF;
+END;
+/
+
+UPDATE competitie
+SET valoare_totala_premii = 120
+WHERE cod_competitie = 20;
+/
+drop trigger trig_11_gresit;
+/
+
+
+CREATE OR REPLACE TRIGGER tr_ex11_corect
+ FOR UPDATE OR INSERT ON competitie
+ COMPOUND TRIGGER
+     TYPE r_comp IS RECORD (
+             cod_comp competitie.cod_competitie%TYPE,
+             val competitie.valoare_totala_premii%TYPE);
+     TYPE t_comp IS TABLE OF r_comp INDEX BY PLS_INTEGER;
+     compet t_comp;
+     AFTER EACH ROW IS
+     BEGIN
+         compet(compet.COUNT + 1).cod_comp := :NEW.cod_competitie;
+         compet(compet.COUNT).val := :NEW.valoare_totala_premii;
+     END AFTER EACH ROW;
+     AFTER STATEMENT IS
+         val_min competitie.valoare_totala_premii%TYPE;
+    BEGIN
+         -- gasesc jumatatea pretului maxim
+         SELECT MAX (valoare_totala_premii) / 2
+         INTO val_min
+         FROM competitie;
+        
+         FOR i IN 1 .. compet.COUNT LOOP
+             IF val_min > compet(i).val THEN
+                 UPDATE competitie
+                 SET valoare_totala_premii = val_min
+                 WHERE cod_competitie = compet(i).cod_comp;
+             END IF;
+         END LOOP;
+     END AFTER STATEMENT;
+END;
+/
+BEGIN
+     UPDATE competitie
+     SET valoare_totala_premii = 0
+     WHERE cod_competitie = 10;
+END;
+/
+select * from competitie;
+/
+
+
+
+--ex12
+create table logs
+(
+    utilizator VARCHAR2(50),
+    nume_database VARCHAR2(70),
+    eveniment VARCHAR2(20),
+    nume_tabel VARCHAR2(40),
+    data_log date
+);
+/
+commit;
+/
+CREATE OR REPLACE TRIGGER tr_log
+AFTER CREATE OR DROP OR ALTER ON SCHEMA
+BEGIN
+    INSERT INTO logs
+    VALUES (SYS.LOGIN_USER, SYS.DATABASE_NAME, SYS.SYSEVENT,
+            SYS.DICTIONARY_OBJ_NAME, SYSDATE);
+    
+    DBMS_OUTPUT.PUT_LINE('Utilizator: ' || SYS.LOGIN_USER);
+    DBMS_OUTPUT.PUT_LINE('Nume baza de date: ' || SYS.DATABASE_NAME);
+    DBMS_OUTPUT.PUT_LINE('Eveniment: ' || SYS.SYSEVENT);
+    DBMS_OUTPUT.PUT_LINE('Numeobiect: ' || SYS.DICTIONARY_OBJ_NAME);
+    DBMS_OUTPUT.PUT_LINE('Data: ' || SYSDATE);
+END;
+/
+
+CREATE INDEX index_ang ON angajati_sala(nume);
+/
+DROP INDEX index_ang;
+/
+
+
+
+--trigger extra
+CREATE OR REPLACE TRIGGER trig_extra
+    BEFORE INSERT OR DELETE OR UPDATE on participa
+BEGIN
+    IF (TO_CHAR(SYSDATE,'D') = 1) OR (TO_CHAR(SYSDATE,'HH24') NOT BETWEEN 8 AND 16) THEN
+        RAISE_APPLICATION_ERROR(-20001, 'Sportivii se pot inscrie la competitii doar in intervalul orar de lucru!');
+    END IF;
+END;
+/
+Insert into participa values (3000, 10, sysdate);
+/
+drop trigger trig_extra;
+/
+
+
+
+
+--ex13
+CREATE OR REPLACE PACKAGE pack13 AS
+    PROCEDURE prog_sponsorizari( cod_loc competitie.cod_locatie%type );
+    PROCEDURE prog_sportivi_fed(cod club.cod_locatie%type);
+    FUNCTION fct_cluburi_an_sponsor( an number, nume_spons sponsori.denumire_sponsor%type) RETURN club%rowtype;
+    PROCEDURE p_9_sport(nume_spons sponsori.denumire_sponsor%type);
+END pack13;
+/
+CREATE OR REPLACE PACKAGE BODY pack13 AS
+
+    --ex6
+    --pentru o locatie primita ca parametru, sa se afiseze suma totala obtinuta din sponsorizari 
+    --impreuna cu numele sponsorilor si data la care au contribuit la aceasta sponsorizare 
+    --pentru primele 3 competitii dupa data competitiei
+
+    PROCEDURE prog_sponsorizari( cod_loc competitie.cod_locatie%type )
+    IS
+        TYPE rec_nume_data IS RECORD
+            (nume sponsori.denumire_sponsor%type,
+            data_sponsorizarii sponsorizeaza.data_sponsorizarii%type);
+        TYPE tablou_sponsorizare IS TABLE OF rec_nume_data;
+        TYPE vector_coduri_comp IS VARRAY(3) OF competitie.cod_competitie%type;
+        tab_sponsori tablou_sponsorizare;
+        vec_comp vector_coduri_comp;
+        suma_totala NUMBER := 0;
+    BEGIN
+        SELECT cod_competitie
+        BULK COLLECT INTO vec_comp
+        FROM competitie where cod_locatie = cod_loc AND rownum <= 3
+        ORDER BY data_competitie;
+        
+        FOR i IN vec_comp.FIRST..vec_comp.LAST LOOP
+            IF vec_comp.exists(i) THEN
+                SELECT sum(suma_oferita)
+                INTO suma_totala
+                FROM SPONSORIZEAZA
+                WHERE COD_COMPETITIE = vec_comp(i);
+                
+                DBMS_OUTPUT.PUT_LINE('DETALII DESPRE COMPETITIA ' || vec_comp(i) || ':');
+                DBMS_OUTPUT.PUT_LINE('Suma totala : ' || suma_totala);
+            
+                SELECT denumire_sponsor, data_sponsorizarii
+                BULK COLLECT INTO tab_sponsori
+                FROM SPONSORI S JOIN SPONSORIZEAZA SP ON (SP.COD_SPONSOR = S.COD_SPONSOR)
+                WHERE SP.COD_COMPETITIE = vec_comp(i);
+                
+                FOR i IN tab_sponsori.FIRST..tab_sponsori.LAST LOOP
+                    IF tab_sponsori.exists(i) THEN
+                        DBMS_OUTPUT.PUT_LINE('Sponsorul ' || i || ' este ' || tab_sponsori(i).nume || ' si a donat in data de - ' || tab_sponsori(i).data_sponsorizarii);
+                    END IF;
+                END LOOP;
+                tab_sponsori.delete();
+            END IF;
+        END LOOP;
+    
+    END PROG_SPONSORIZARI;
+    
+    
+    -- ex 7
+    --sa se scrie codul si numele federatiilor, codul si numele 
+    --sportivilor care participa la competitii la un cod de locatie dat
+    PROCEDURE prog_sportivi_fed(cod club.cod_locatie%type) 
+    IS
+        cod_f federatie_de_sport.cod_federatie%type;
+        den federatie_de_sport.denumire%type;
+        c_sportivi SYS_REFCURSOR;
+        
+        TYPE sportiv_record IS RECORD
+                    ( cod_s sportiv.cod_sportiv%type,
+                    nume_s sportiv.nume%type,
+                    prenume_s sportiv.prenume%type
+                    );
+        sportiv_detalii sportiv_record;
+        CURSOR c_fest IS SELECT f.cod_federatie, f.denumire, 
+                                                CURSOR (    
+                                                        SELECT s.cod_sportiv, s.nume, s.prenume 
+                                                        FROM sportiv s JOIN apartine a  ON (a.cod_sportiv = s.cod_sportiv)
+                                                        WHERE a.cod_federatie = f.cod_federatie)
+                            FROM FEDERATIE_DE_SPORT f JOIN COMPETITIE c ON (f.cod_federatie = c.cod_federatie)
+                            WHERE c.cod_locatie = cod;
+    BEGIN
+        DBMS_OUTPUT.PUT_LINE('Codul locatiei este : ' || cod);
+        
+        OPEN c_fest;
+        
+        LOOP
+            FETCH c_fest INTO cod_f, den, c_sportivi;
+            EXIT WHEN c_fest%NOTFOUND;
+            DBMS_OUTPUT.PUT_LINE('Cod federatie : '||cod_f||'. Nume federatie :'||den||' are sportivii :');
+            
+            LOOP
+                FETCH c_sportivi INTO sportiv_detalii;
+                EXIT WHEN c_sportivi%NOTFOUND;
+                
+                DBMS_OUTPUT.PUT_LINE('Cod sportiv ('||sportiv_detalii.cod_s||') pe care il cheama '||sportiv_detalii.nume_s||' '||sportiv_detalii.prenume_s||'.');
+                
+            END LOOP;
+        END LOOP;
+        
+        CLOSE c_fest;
+    
+    END prog_sportivi_fed;
+    
+    
+    --ex8 
+    --Sa se afiseze primul club (luat in ordine crescatoare dupa cod) la care sportivii au varsta < 30 ani si care
+    --au participat la competitia din anul dat ca parametru sponsorizata de anumit sponsor
+    FUNCTION fct_cluburi_an_sponsor( an number,
+                                                        nume_spons sponsori.denumire_sponsor%type)
+                                            RETURN club%rowtype
+    IS
+        informatii club%rowtype;
+        
+    BEGIN
+        SELECT c.cod_club, c.cod_locatie, c.denumire, c.data_infiintare_club, c.nume_admin, c.prenume_admin
+        INTO informatii
+        FROM club c JOIN sportiv s ON (c.cod_club=s.cod_club)
+        JOIN participa p ON (s.cod_sportiv=p.cod_sportiv) JOIN competitie co ON (co.cod_competitie=p.cod_competitie)
+        JOIN sponsorizeaza a ON (co.cod_competitie=a.cod_competitie) 
+        JOIN sponsori b ON (a.cod_sponsor=b.cod_sponsor)
+        WHERE months_between(sysdate,s.data_nastere) < 30*12 AND
+        to_number(to_char(co.data_competitie,'yyyy'))= an AND
+        lower(b.denumire_sponsor) = nume_spons AND rownum <= 1
+        ORDER BY c.cod_club;
+        
+        RETURN informatii;
+        
+        EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+            RAISE_APPLICATION_ERROR(-20000, 'Nu s-au gasit cluburi care sa indeplineasca cerintele');
+        WHEN TOO_MANY_ROWS THEN
+            RAISE_APPLICATION_ERROR(-20001, 'Mai multe cluburi indeplinesc cerintele!');
+        WHEN OTHERS THEN
+            RAISE_APPLICATION_ERROR(-20002, 'Alta eroare!');
+    
+    END fct_cluburi_an_sponsor;
+
+
+    --ex9
+    --Afisati sportivul care a fost la cele mai multe competitii de sport sponsorizate de o anumita firma,
+    --si nr de competitii. (aici a trebuit sa mai adaug un sportiv, insertul il gasiti pe ultimul rand)
+    PROCEDURE p_9_sport(nume_spons sponsori.denumire_sponsor%type)
+    IS
+        CURSOR c IS select s.cod_sportiv cod, initcap(s.nume), initcap(s.prenume), count(*) numar
+                        from sportiv s JOIN participa p on (s.cod_sportiv = p.cod_sportiv)
+                         JOIN competitie c on (p.cod_competitie = c.cod_competitie)
+                         JOIN sponsorizeaza s1 on (s1.cod_competitie = c.cod_competitie)
+                         JOIN sponsori s2 on (s1.cod_sponsor = s2.cod_sponsor)
+                         where initcap(nume_spons) = initcap(denumire_sponsor)
+                         group by s.cod_sportiv, initcap(s.nume), initcap(s.prenume);
+                        
+        TYPE rec_inreg IS RECORD
+                (cod_s sportiv.cod_sportiv%type,
+                nume sportiv.nume%type,
+                prenume sportiv.prenume%type,
+                nr NUMBER);
+        inreg rec_inreg;
+        maxim NUMBER := 0;
+        frecv NUMBER :=0;
+    BEGIN
+        FOR inr IN c LOOP
+            IF inr.numar > maxim THEN
+                maxim := inr.numar;
+                inreg := inr;
+                frecv := 1;
+            ELSIF inr.numar = maxim THEN
+                frecv := frecv + 1;
+            END IF;
+        END LOOP;
+        
+        IF maxim = 0 THEN
+            RAISE NO_DATA_FOUND;
+        END IF;
+        
+        IF frecv > 1 THEN
+            RAISE TOO_MANY_ROWS;
+        END IF;
+    
+        DBMS_OUTPUT.PUT_LINE('Persoana '||inreg.nume || ' ' || inreg.prenume||' a fost la '||inreg.nr||' competitii sportive, reprezentand maximul de competitii la care a fost o pers dintre competiile sponsorizate de '||nume_spons);
+        
+        EXCEPTION
+            WHEN TOO_MANY_ROWS THEN
+                RAISE_APPLICATION_ERROR(-20001, 'Mai multi sportivi indeplinesc cerinta.');
+            WHEN NO_DATA_FOUND THEN
+                RAISE_APPLICATION_ERROR(-20000, 'Nu este indeplinita cerinta');
+            WHEN OTHERS THEN 
+                RAISE_APPLICATION_ERROR(-20002, 'Alta eroare!!!!');
+    END p_9_sport;
+END pack13;
+/
+–deoarece am testat fiecare functie in parte la fiecare execitiu, am considerat ca este de ajuns doar sa le pun in pachet, fara a le mai testa o data.
+
+
+
+
+--ex14
+CREATE OR REPLACE PACKAGE pack14 AS
+    TYPE rec IS RECORD
+    (cod_a antrenori.cod_antrenor%type,
+    nume antrenori.nume%type,
+    prenume antrenori.prenume%type,
+    data_n antrenori.data_nastere%type,
+    nrtel antrenori.nrtelefon%type);
+    TYPE tab_rec IS VARRAY(10) OF rec;
+    vect tab_rec;
+    
+    PROCEDURE p_14_1(fed federatie_de_sport.denumire%type);
+    
+    FUNCTION p_14_2 RETURN federatie_de_sport.denumire%type;
+    
+    PROCEDURE p_14_3;
+    
+    FUNCTION p_14_4(an NUMBER) RETURN tab_rec;
+    
+END pack14;
+/
+CREATE OR REPLACE PACKAGE BODY pack14 AS
+
+    --Sa se afiseze angajatii care au salariu > media salariilor angajatilor
+    --ce lucreaza intr-o sala din cadrul federatiei de fitness sau unei federatii primita ca parametru
+    PROCEDURE p_14_1(fed federatie_de_sport.denumire%type)
+    IS
+        CURSOR c IS SELECT cod_angajat, nume, prenume, data_nastere, sex, salariu
+                        FROM angajati_sala e
+                        WHERE e.salariu > ( SELECT avg(salariu)
+                                            FROM angajati_sala a JOIN apartine c ON (a.cod_sala=c.cod_sala)
+                                            JOIN federatie_de_sport d ON (c.cod_federatie=d.cod_federatie)
+                                             WHERE lower(d.denumire) = lower(fed) or lower(d.denumire) = 'federatiadefitness');
+    BEGIN
+        FOR x IN c LOOP
+            dbms_output.put('Angajatul '|| x.nume || ' '||x.prenume||', care este nascut pe data de'||x.data_nastere||' are salariul '||x.salariu||' si este ');
+            IF x.sex = 'm' THEN DBMS_OUTPUT.PUT_LINE('barbat.');
+            ELSE DBMS_OUTPUT.PUT_LINE('femeie.');
+            END IF;
+        END LOOP;
+    END p_14_1;
+    
+    
+    -- sa se selecteze federatia cu cei mai multi sportivi, daca sunt mai multe, sa se ia prima ordonata dupa cod
+    FUNCTION p_14_2 RETURN federatie_de_sport.denumire%type IS
+        nume_f federatie_de_sport.denumire%type := 'dani';
+        TYPE rec_f IS RECORD
+                (cod_f federatie_De_sport.cod_federatie%type,
+                nr number);
+        vect_rec rec_f;
+    begin
+        with abc as (select cod_federatie, count(*) nr_sportivi from apartine group by cod_federatie)
+        select * into vect_rec
+        from abc 
+        where nr_sportivi = (select max(nr_sportivi) from abc) and rownum <= 1 
+        order by cod_federatie;
+        
+        select denumire into nume_f
+        from federatie_de_sport
+        where cod_federatie = vect_rec.cod_f;
+        
+        return nume_f;
+    end p_14_2;
+    
+    
+    ---sa se scrie o procedura ce afiseaza sportivii impreuna cu nr de zile si numele clubului la
+    --care au stat in trecut cele mai multe zile si sa se specifice daca au
+    --stat sub 1000 zile, sub 5000 zile sau peste 5000zile.
+    PROCEDURE p_14_3 IS
+        TYPE rec_14_3 IS RECORD
+        (cod_s sportiv.cod_sportiv%type,
+        nume sportiv.nume%type,
+        prenume sportiv.prenume%type,
+        nrtel sportiv.nrtelefon%type,
+        den_club club.denumire%type,
+        nr_zile number);
+        TYPE tablou_sport IS TABLE OF rec_14_3;
+        tab_sportivi tablou_sport;
+    BEGIN
+        WITH istoric AS ( SELECT cod_sportiv,cod_club,sum(data_final-data_start) as "NUMAR_ZILE"
+                            FROM club_history
+                            GROUP BY cod_sportiv,cod_club),
+        istoric_cu_maxim AS ( SELECT * FROM istoric i
+                                WHERE i.numar_zile = ( select max(numar_zile) from istoric
+                                where i.cod_sportiv=cod_sportiv))
+        select s.cod_sportiv ,s.nume, s.prenume, s.nrtelefon, c.denumire, numar_zile
+        BULK COLLECT INTO tab_sportivi
+        FROM sportiv s join istoric_cu_maxim ist on (s.cod_sportiv=ist.cod_sportiv) 
+        join club c on (ist.cod_club=c.cod_club)
+        ORDER BY numar_zile;
+        
+        FOR i IN tab_sportivi.FIRST..tab_sportivi.LAST LOOP
+            IF tab_sportivi.exists(i) THEN
+                DBMS_OUTPUT.PUT('Sportivul '||tab_sportivi(i).nume||' '||tab_sportivi(i).prenume||' (cod '||tab_sportivi(i).cod_s||') il poti suna la '||tab_sportivi(i).nrtel||' si a facut parte din clubul '||tab_sportivi(i).den_club||' pentru o perioada aproximativa de ');
+                CASE
+                    WHEN tab_sportivi(i).nr_zile < 1000 THEN DBMS_OUTPUT.PUT_LINE(' SUB 1000 ZILE');
+                    WHEN tab_sportivi(i).nr_zile < 5000 THEN DBMS_OUTPUT.PUT_LINE(' INTRE 1000 SI 5000');
+                    ELSE DBMS_OUTPUT.PUT_LINE('PESTE 5000 ZILE');
+                END CASE;
+            END IF;
+        END LOOP;
+        
+        
+    END p_14_3;
+    
+    
+    --Sa se afiseze primii 10 antrenori ai cluburilor care se afla in bucuresti sau
+    --judetul neamt si au sportivi nascuti inainte de un an trimis ca parametru.Daca numarul
+    --de telefon este null, atunci nu se va afisa.
+    FUNCTION p_14_4(an NUMBER) RETURN tab_rec
+    IS
+        vect_ret tab_rec;
+        cursor a is (SELECT DISTINCT cod_antrenor,a.nume,a.prenume,a.data_nastere,a.nrtelefon
+                    FROM antrenori a JOIN club b ON (a.cod_club=b.cod_club) 
+                    JOIN locatie c ON(b.cod_locatie=c.cod_locatie) 
+                    JOIN sportiv d ON(b.cod_club=d.cod_club)
+                    WHERE (lower(judet)='bucuresti' OR lower(judet)='neamt') AND
+                    to_number(to_char(d.data_nastere,'yyyy')) <= an AND rownum <= 10);
+    BEGIN
+        open a;
+        fetch a bulk collect into vect_ret;
+        close a;
+        return vect_ret;
+    END p_14_4;
+END pack14;
+/
+
+begin
+    dbms_output.put_line('------------------------------------------------------------');
+    declare
+        an number := '&an_limita_pentru_procedura_14_4';
+    begin
+        dbms_output.put_line('incepe executia p_14_4');
+        --testare p_14_4
+        pack14.vect := pack14.p_14_4(an);
+        FOR i IN pack14.vect.FIRST..pack14.vect.LAST LOOP
+            IF pack14.vect.exists(i) THEN
+                DBMS_OUTPUT.PUT('codul '||pack14.vect(i).cod_a || ' apartine antrenorului '||pack14.vect(i).nume || ' '|| pack14.vect(i).prenume||' si este nascut in data de '||pack14.vect(i).data_n);
+                IF pack14.vect(i).nrtel IS NOT NULL THEN DBMS_OUTPUT.PUT_LINE(' si il puteti contacta la numarul '||pack14.vect(i).nrtel);
+                ELSE dbms_output.put_line('.');
+                END IF;
+            END IF;
+        END LOOP;
+    end;
+    dbms_output.put_line('------------------------------------------------------------');
+    begin
+        dbms_output.put_line('incepe executia procedurii p_14_1 care are ca si parametru valoarea returnata de p_14_2');
+        pack14.p_14_1(pack14.p_14_2());
+    end;
+    dbms_output.put_line('------------------------------------------------------------');
+    begin
+        dbms_output.put_line('incepe executia procedurii p_14_3');
+        pack14.p_14_3();
+    end;
+    dbms_output.put_line('------------------------------------------------------------');
+end;
+/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
