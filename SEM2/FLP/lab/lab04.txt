@@ -1,0 +1,30 @@
+is_right(L, R, [L | [R | _]]).
+is_right(L, R, [_ | Tail]) :- is_right(L, R, Tail).
+
+
+next_to(X, Y, List) :- is_right(X, Y, List). 
+next_to(X, Y, List) :- is_right(Y, X, List).
+
+
+owns_zebra(Strada, Posesor_zebra):-
+    Strada = [
+                casa(1,_,_,_,_,_),
+                casa(2,_,_,_,_,_),
+                casa(3,_,_,_,_,_),
+                casa(4,_,_,_,_,_),
+                casa(5,_,_,_,_,_)],  
+    member(casa(_,red, english, _, _, _), Strada),  
+    member(casa(_,_, spaniard, dog, _, _), Strada),  
+    member(casa(_,green, _, _, coffee, _), Strada),  
+    member(casa(_,_, ukrainian, _, tea, _), Strada), 
+    is_right(casa(_,green,_,_,_,_), casa(_,ivory,_,_,_,_), Strada),  
+    member(casa(_,_, _, snails, _, old_gold), Strada),  
+    member(casa(_,yellow, _, _, _, kools), Strada), 
+    [_, _, casa(_,_, _, _, milk, _), _, _] = Strada,  
+    [casa(_,_, norwegian, _, _, _) | _] = Strada,  
+    next_to(casa(_,_, _, _, _, chesterfields), casa(_,_, _, fox, _, _), Strada),  
+    next_to(casa(_,_, _, _, _, kools), casa(_,_, _, horse, _, _), Strada),  
+    member(casa(_,_, _, _, orange_juice, lucky_strike), Strada),  
+    member(casa(_,_, japanese, _, _, parliaments), Strada),  
+    next_to(casa(_,_, norwegian, _, _, _), casa(_,blue, _, _, _, _), Strada),  
+    member(casa(_,_, Posesor_zebra, zebra, _, _), Strada).

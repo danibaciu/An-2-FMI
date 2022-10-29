@@ -1,0 +1,264 @@
+
+	 Populatia initiala : 
+	1.	x = 	-1.15089		 genele : 00011001111010011010111		fit(x) = 	-0.475432
+	2.	x = 	-0.769639		 genele : 00100101100011000011000		fit(x) = 	0.638016
+	3.	x = 	0.418422		 genele : 01001001110011011110101		fit(x) = 	2.24334
+	4.	x = 	-0.111701		 genele : 00111001101000000101010		fit(x) = 	1.87582
+	5.	x = 	1.29189		 genele : 01100100011101011101111		fit(x) = 	1.62291
+	6.	x = 	3.89745		 genele : 10110011111110011101110		fit(x) = 	-9.2927
+	7.	x = 	1.86852		 genele : 01110110000011101101010		fit(x) = 	0.377147
+	8.	x = 	-1.1139		 genele : 00011011000010101010101		fit(x) = 	-0.354669
+	9.	x = 	1.15675		 genele : 01100000010101100001011		fit(x) = 	1.81868
+	10.	x = 	-0.980773		 genele : 00011111000110101011011		fit(x) = 	0.0573121
+	11.	x = 	-1.52683		 genele : 00001110011100001010101		fit(x) = 	-1.85803
+	12.	x = 	2.79601		 genele : 10010010010111001101000		fit(x) = 	-3.02165
+	13.	x = 	3.34591		 genele : 10100011001001001110011		fit(x) = 	-5.84919
+	14.	x = 	1.42941		 genele : 01101000101010000100000		fit(x) = 	1.3862
+	15.	x = 	-1.88024		 genele : 00000011101001111001110		fit(x) = 	-3.41555
+	16.	x = 	1.79894		 genele : 01110011111011110011001		fit(x) = 	0.56276
+	17.	x = 	-1.2148		 genele : 00010111111101100110100		fit(x) = 	-0.690525
+	18.	x = 	0.933346		 genele : 01011001100001001100001		fit(x) = 	2.06221
+	19.	x = 	2.6367		 genele : 10001101100000000011000		fit(x) = 	-2.31547
+	20.	x = 	1.67552		 genele : 01110000001010101111101		fit(x) = 	0.868159
+
+	 Probabilitati de selectie :
+		 cromozomul	1	are probabilitatea de selectie		0.0345501
+		 cromozomul	2	are probabilitatea de selectie		-0.0463653
+		 cromozomul	3	are probabilitatea de selectie		-0.163026
+		 cromozomul	4	are probabilitatea de selectie		-0.136318
+		 cromozomul	5	are probabilitatea de selectie		-0.117939
+		 cromozomul	6	are probabilitatea de selectie		0.67531
+		 cromozomul	7	are probabilitatea de selectie		-0.0274076
+		 cromozomul	8	are probabilitatea de selectie		0.0257741
+		 cromozomul	9	are probabilitatea de selectie		-0.132165
+		 cromozomul	10	are probabilitatea de selectie		-0.00416493
+		 cromozomul	11	are probabilitatea de selectie		0.135025
+		 cromozomul	12	are probabilitatea de selectie		0.219587
+		 cromozomul	13	are probabilitatea de selectie		0.425066
+		 cromozomul	14	are probabilitatea de selectie		-0.100737
+		 cromozomul	15	are probabilitatea de selectie		0.248212
+		 cromozomul	16	are probabilitatea de selectie		-0.0408964
+		 cromozomul	17	are probabilitatea de selectie		0.0501811
+		 cromozomul	18	are probabilitatea de selectie		-0.149863
+		 cromozomul	19	are probabilitatea de selectie		0.168268
+		 cromozomul	20	are probabilitatea de selectie		-0.06309
+
+	 Intervalul de selectie este :
+0   0.0345501   -0.0118152   -0.174841   -0.311159   -0.429098   0.246212   0.218804   0.244578   0.112413   0.108248   0.243273   0.462859   0.887926   0.787189   1.0354   0.994504   1.04469   0.894822   1.06309   1   
+
+	 random = 	0.223365		 selectam cromozomul 	11
+
+	 random = 	0.886349		 selectam cromozomul 	13
+
+	 random = 	0.252754		 selectam cromozomul 	12
+
+	 random = 	0.0636311		 selectam cromozomul 	6
+
+	 random = 	0.472243		 selectam cromozomul 	13
+
+	 random = 	0.507309		 selectam cromozomul 	13
+
+	 random = 	0.765465		 selectam cromozomul 	13
+
+	 random = 	0.963103		 selectam cromozomul 	15
+
+	 random = 	0.767998		 selectam cromozomul 	13
+
+	 random = 	0.718009		 selectam cromozomul 	13
+
+	 random = 	0.599475		 selectam cromozomul 	13
+
+	 random = 	0.783349		 selectam cromozomul 	13
+
+	 random = 	0.178137		 selectam cromozomul 	11
+
+	 random = 	0.361034		 selectam cromozomul 	12
+
+	 random = 	0.590777		 selectam cromozomul 	13
+
+	 random = 	0.425184		 selectam cromozomul 	12
+
+	 random = 	0.27427		 selectam cromozomul 	12
+
+	 random = 	0.400037		 selectam cromozomul 	12
+
+	 random = 	0.3137		 selectam cromozomul 	12
+Populatia dupa selectie : 
+	1.	x = 	-1.52683		 genele : 00001110011100001010101		fit(x) = 	-1.85803
+	2.	x = 	3.34591		 genele : 10100011001001001110011		fit(x) = 	-5.84919
+	3.	x = 	2.79601		 genele : 10010010010111001101000		fit(x) = 	-3.02165
+	4.	x = 	3.89745		 genele : 10110011111110011101110		fit(x) = 	-9.2927
+	5.	x = 	3.34591		 genele : 10100011001001001110011		fit(x) = 	-5.84919
+	6.	x = 	3.34591		 genele : 10100011001001001110011		fit(x) = 	-5.84919
+	7.	x = 	3.34591		 genele : 10100011001001001110011		fit(x) = 	-5.84919
+	8.	x = 	-1.88024		 genele : 00000011101001111001110		fit(x) = 	-3.41555
+	9.	x = 	3.34591		 genele : 10100011001001001110011		fit(x) = 	-5.84919
+	10.	x = 	3.34591		 genele : 10100011001001001110011		fit(x) = 	-5.84919
+	11.	x = 	3.34591		 genele : 10100011001001001110011		fit(x) = 	-5.84919
+	12.	x = 	3.34591		 genele : 10100011001001001110011		fit(x) = 	-5.84919
+	13.	x = 	-1.52683		 genele : 00001110011100001010101		fit(x) = 	-1.85803
+	14.	x = 	2.79601		 genele : 10010010010111001101000		fit(x) = 	-3.02165
+	15.	x = 	3.34591		 genele : 10100011001001001110011		fit(x) = 	-5.84919
+	16.	x = 	2.79601		 genele : 10010010010111001101000		fit(x) = 	-3.02165
+	17.	x = 	2.79601		 genele : 10010010010111001101000		fit(x) = 	-3.02165
+	18.	x = 	2.79601		 genele : 10010010010111001101000		fit(x) = 	-3.02165
+	19.	x = 	2.79601		 genele : 10010010010111001101000		fit(x) = 	-3.02165
+
+	Probabilitatea de incrucisare este 0.25
+
+	 1) 	0.269723
+	 2) 	0.101169	 <0.25 deci selectam cromozomul curent pentru incrucisare
+	 3) 	0.636708
+	 4) 	0.0551469	 <0.25 deci selectam cromozomul curent pentru incrucisare
+	 5) 	0.880551
+	 6) 	0.195074	 <0.25 deci selectam cromozomul curent pentru incrucisare
+	 7) 	0.281137
+	 8) 	0.228278	 <0.25 deci selectam cromozomul curent pentru incrucisare
+	 9) 	0.387646
+	 10) 	0.556993
+	 11) 	0.657002
+	 12) 	0.382031
+	 13) 	0.0843532	 <0.25 deci selectam cromozomul curent pentru incrucisare
+	 14) 	0.987182
+	 15) 	0.822901
+	 16) 	0.462264
+	 17) 	0.268166
+	 18) 	0.68749
+	 19) 	0.390637
+
+	Recombinare dintre cromozomul 13 si cromozomul 4 :
+00001110011100001010101	10110011111110011101110	 punct 1
+ Rezultat 00110011111110011101110	10001110011100001010101
+
+	Recombinare dintre cromozomul 6 si cromozomul 8 :
+10100011001001001110011	00000011101001111001110	 punct 1
+ Rezultat 10000011101001111001110	00100011001001001110011
+
+	Dupa recombinare : 
+	1.	x = 	-1.52683		 genele : 00001110011100001010101		fit(x) = 	-1.85803
+	2.	x = 	3.34591		 genele : 10100011001001001110011		fit(x) = 	-5.84919
+	3.	x = 	2.79601		 genele : 10010010010111001101000		fit(x) = 	-3.02165
+	4.	x = 	2.66748		 genele : 10001110011100001010101		fit(x) = 	-2.44796
+	5.	x = 	3.34591		 genele : 10100011001001001110011		fit(x) = 	-5.84919
+	6.	x = 	2.31406		 genele : 10000011101001111001110		fit(x) = 	-1.04082
+	7.	x = 	3.34591		 genele : 10100011001001001110011		fit(x) = 	-5.84919
+	8.	x = 	-0.848397		 genele : 00100011001001001110011		fit(x) = 	0.431826
+	9.	x = 	3.34591		 genele : 10100011001001001110011		fit(x) = 	-5.84919
+	10.	x = 	3.34591		 genele : 10100011001001001110011		fit(x) = 	-5.84919
+	11.	x = 	3.34591		 genele : 10100011001001001110011		fit(x) = 	-5.84919
+	12.	x = 	3.34591		 genele : 10100011001001001110011		fit(x) = 	-5.84919
+	13.	x = 	-0.29685		 genele : 00110011111110011101110		fit(x) = 	1.61503
+	14.	x = 	2.79601		 genele : 10010010010111001101000		fit(x) = 	-3.02165
+	15.	x = 	3.34591		 genele : 10100011001001001110011		fit(x) = 	-5.84919
+	16.	x = 	2.79601		 genele : 10010010010111001101000		fit(x) = 	-3.02165
+	17.	x = 	2.79601		 genele : 10010010010111001101000		fit(x) = 	-3.02165
+	18.	x = 	2.79601		 genele : 10010010010111001101000		fit(x) = 	-3.02165
+	19.	x = 	2.79601		 genele : 10010010010111001101000		fit(x) = 	-3.02165
+	20.	x = 	0.418422		 genele : 01001001110011011110101		fit(x) = 	2.24334
+
+	Probabilitatea de mutatie pentru fiecare gena este 0.01.
+
+	 Au fost modificati cromozomii : 
+		7
+		20
+
+
+	Dupa mutatia genelor : 
+	1.	x = 	-1.52683		 genele : 00001110011100001010101		fit(x) = 	-1.85803
+	2.	x = 	3.34591		 genele : 10100011001001001110011		fit(x) = 	-5.84919
+	3.	x = 	2.79601		 genele : 10010010010111001101000		fit(x) = 	-3.02165
+	4.	x = 	2.66748		 genele : 10001110011100001010101		fit(x) = 	-2.44796
+	5.	x = 	3.34591		 genele : 10100011001001001110011		fit(x) = 	-5.84919
+	6.	x = 	2.31406		 genele : 10000011101001111001110		fit(x) = 	-1.04082
+	7.	x = 	3.47698		 genele : 10100111001001001110011		fit(x) = 	-6.6124
+	8.	x = 	-0.848397		 genele : 00100011001001001110011		fit(x) = 	0.431826
+	9.	x = 	3.34591		 genele : 10100011001001001110011		fit(x) = 	-5.84919
+	10.	x = 	3.34591		 genele : 10100011001001001110011		fit(x) = 	-5.84919
+	11.	x = 	3.34591		 genele : 10100011001001001110011		fit(x) = 	-5.84919
+	12.	x = 	3.34591		 genele : 10100011001001001110011		fit(x) = 	-5.84919
+	13.	x = 	-0.29685		 genele : 00110011111110011101110		fit(x) = 	1.61503
+	14.	x = 	2.79601		 genele : 10010010010111001101000		fit(x) = 	-3.02165
+	15.	x = 	3.34591		 genele : 10100011001001001110011		fit(x) = 	-5.84919
+	16.	x = 	2.79601		 genele : 10010010010111001101000		fit(x) = 	-3.02165
+	17.	x = 	2.79601		 genele : 10010010010111001101000		fit(x) = 	-3.02165
+	18.	x = 	2.79601		 genele : 10010010010111001101000		fit(x) = 	-3.02165
+	19.	x = 	2.79601		 genele : 10010010010111001101000		fit(x) = 	-3.02165
+	20.	x = 	0.418429		 genele : 01001001110011011111101		fit(x) = 	2.24335
+
+
+------------------------------------------------
+
+	 Populatia finala : 
+	1.	x = 	5.85266		 genele : 11101111101001001110101		fit(x) = 	-26.401
+	2.	x = 	2.02086		 genele : 01111010101101001111101		fit(x) = 	-0.0630182
+	3.	x = 	6.34212		 genele : 11111110100101001100111		fit(x) = 	-31.8804
+	4.	x = 	6.21516		 genele : 11111010101101001110101		fit(x) = 	-30.413
+	5.	x = 	6.21517		 genele : 11111010101101001111101		fit(x) = 	-30.4131
+	6.	x = 	6.21516		 genele : 11111010101101001110101		fit(x) = 	-30.413
+	7.	x = 	6.28503		 genele : 11111100110101101100101		fit(x) = 	-31.2166
+	8.	x = 	6.28882		 genele : 11111100111101000110001		fit(x) = 	-31.2604
+	9.	x = 	6.21106		 genele : 11111010100101001110101		fit(x) = 	-30.3662
+	10.	x = 	6.37695		 genele : 11111111101001001110101		fit(x) = 	-32.2885
+	11.	x = 	6.21516		 genele : 11111010101101001110101		fit(x) = 	-30.413
+	12.	x = 	6.37893		 genele : 11111111101101000110101		fit(x) = 	-32.3119
+	13.	x = 	6.34209		 genele : 11111110100101001000101		fit(x) = 	-31.88
+	14.	x = 	6.34209		 genele : 11111110100101001000101		fit(x) = 	-31.88
+	15.	x = 	6.28477		 genele : 11111100110101001100101		fit(x) = 	-31.2136
+	16.	x = 	6.19468		 genele : 11111010000101001110101		fit(x) = 	-30.1793
+	17.	x = 	6.12498		 genele : 11110111111101000110001		fit(x) = 	-29.3904
+	18.	x = 	6.21465		 genele : 11111010101100001110111		fit(x) = 	-30.4072
+	19.	x = 	6.21106		 genele : 11111010100101001110101		fit(x) = 	-30.3662
+	20.	x = 	0.485197		 genele : 01001011110101111001101		fit(x) = 	2.24978
+
+-----------------------------------
+		 Evolutia maximului :
+	1) 2.24334
+	2) 2.24335
+	3) 2.24335
+	4) 2.24335
+	5) 2.24335
+	6) 2.24335
+	7) 2.24335
+	8) 2.24335
+	9) 2.24335
+	10) 2.24368
+	11) 2.24368
+	12) 2.24368
+	13) 2.24368
+	14) 2.24368
+	15) 1.31094
+	16) 1.31094
+	17) 1.31094
+	18) 1.31094
+	19) 1.31094
+	20) 1.31094
+	21) 1.31094
+	22) 1.31094
+	23) 1.31094
+	24) 1.34242
+	25) 1.34242
+	26) 1.34242
+	27) 1.34242
+	28) 1.34242
+	29) 1.34242
+	30) 1.34242
+	31) 1.34248
+	32) 1.34199
+	33) 1.34199
+	34) 1.34199
+	35) 1.34199
+	36) 0
+	37) 0
+	38) 0
+	39) 0
+	40) 0
+	41) 0
+	42) 0
+	43) 0
+	44) 0
+	45) 0
+	46) 0
+	47) 0
+	48) 0.226354
+	49) 2.24909
+	50) 2.24978
