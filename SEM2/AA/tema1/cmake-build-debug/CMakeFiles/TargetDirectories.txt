@@ -1,3 +1,0 @@
-C:/DOCUMENTE/Facultate_AN_2/Sem2/AA/tema1/cmake-build-debug/CMakeFiles/tema1.dir
-C:/DOCUMENTE/Facultate_AN_2/Sem2/AA/tema1/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/DOCUMENTE/Facultate_AN_2/Sem2/AA/tema1/cmake-build-debug/CMakeFiles/rebuild_cache.dir

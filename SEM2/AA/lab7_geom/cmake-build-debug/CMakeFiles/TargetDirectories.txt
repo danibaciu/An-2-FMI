@@ -1,3 +1,0 @@
-C:/DOCUMENTE/Facultate_AN_2/Sem2/AA/lab7_geom/cmake-build-debug/CMakeFiles/lab7_geom.dir
-C:/DOCUMENTE/Facultate_AN_2/Sem2/AA/lab7_geom/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/DOCUMENTE/Facultate_AN_2/Sem2/AA/lab7_geom/cmake-build-debug/CMakeFiles/rebuild_cache.dir

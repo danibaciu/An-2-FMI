@@ -1,3 +1,0 @@
-C:/DOCUMENTE/Facultate_AN_2/Sem2/AA/tema_alg_genetici/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/DOCUMENTE/Facultate_AN_2/Sem2/AA/tema_alg_genetici/cmake-build-debug/CMakeFiles/tema_alg_genetici.dir
-C:/DOCUMENTE/Facultate_AN_2/Sem2/AA/tema_alg_genetici/cmake-build-debug/CMakeFiles/rebuild_cache.dir
